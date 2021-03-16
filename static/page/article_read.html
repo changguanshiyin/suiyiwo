@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://api.popin.cc/iframe/article_read.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=GBK"></head><body>
+<script type="text/javascript" async="" src="./td_js_sdk_171.js"></script><script type="text/javascript"> (function(t,e){if(void 0===e[t]){e[t]=function(){e[t].clients.push(this),this._init=[Array.prototype.slice.call(arguments)]},e[t].clients=[];for(var r=function(t){return function(){return this["_"+t]=this["_"+t]||[],this["_"+t].push(Array.prototype.slice.call(arguments)),this}},s=["addRecord","set","trackEvent","trackPageview","trackClicks","ready"],a=0;a<s.length;a++){var c=s[a];e[t].prototype[c]=r(c)}var n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=("https:"===document.location.protocol?"https:":"http:")+"//api.popin.cc/td_js_sdk_171.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(n,i)}})("Treasure2",window);</script>
+<script type="text/javascript">window.Cookies=(function(){function a(){var e=0;var f={};for(;e<arguments.length;e++){var c=arguments[e];for(var d in c){f[d]=c[d]}}return f}function b(c){function d(s,q,k){var p;if(typeof document==="undefined"){return}if(arguments.length>1){k=a({path:"/"},d.defaults,k);if(typeof k.expires==="number"){var m=new Date();m.setMilliseconds(m.getMilliseconds()+k.expires*86400000);k.expires=m}k.expires=k.expires?k.expires.toUTCString():"";try{p=JSON.stringify(q);if(/^[\{\[]/.test(p)){q=p}}catch(o){}if(!c.write){q=encodeURIComponent(String(q)).replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g,decodeURIComponent)}else{q=c.write(q,s)}s=encodeURIComponent(String(s));s=s.replace(/%(23|24|26|2B|5E|60|7C)/g,decodeURIComponent);s=s.replace(/[\(\)]/g,escape);var h="";for(var f in k){if(!k[f]){continue}h+="; "+f;if(k[f]===true){continue}h+="="+k[f]}return(document.cookie=s+"="+q+h)}if(!s){p={}}var t=document.cookie?document.cookie.split("; "):[];var r=/(%[0-9A-Z]{2})+/g;var l=0;for(;l<t.length;l++){var j=t[l].split("=");var n=j.slice(1).join("=");if(!this.json&&n.charAt(0)==='"'){n=n.slice(1,-1)}try{var g=j[0].replace(r,decodeURIComponent);n=c.read?c.read(n,g):c(n,g)||n.replace(r,decodeURIComponent);if(this.json){try{n=JSON.parse(n)}catch(o){}}if(s===g){p=n;break}if(!s){p[g]=n}}catch(o){}}return p}d.set=d;d.get=function(e){return d.call(d,e)};d.getJSON=function(){return d.apply({json:true},[].slice.call(arguments))};d.defaults={};d.remove=function(f,e){d(f,"",a(e,{expires:-1}))};d.withConverter=b;return d}return b(function(){})})();</script>
+<script type="text/javascript">
+    try{
+        var READ_KEY_OF_COOKIE = '_article_read_rt';
+        var articleReadDataList = [];
+        var maxOfAdReadRecord = 15;
+        var urlParams = {};
+        var target = parent.postMessage ? parent : (parent.document.postMessage ? parent.document : undefined);
+        var commonCategoryList = [
+            "animalpet",
+            "beauty",
+            "business",
+            "carbike",
+            "career",
+            "digital",
+            "ecology",
+            "economy",
+            "education",
+            "electronics",
+            "entertainment",
+            "fashion",
+            "gourmet",
+            "health",
+            "hobby",
+            "home",
+            "lifestyle",
+            "lovemarrige",
+            "money",
+            "politics",
+            "social",
+            "sports",
+            "trip"
+        ];
+        var CATEGORY_READ_KEY_OF_COOKIE = '_c_read';
+        var categoryReadInforList = Cookies.get(CATEGORY_READ_KEY_OF_COOKIE)
+                ? Cookies.get(CATEGORY_READ_KEY_OF_COOKIE).split('|')
+                : new Array(commonCategoryList.length);
+
+        var feLogId = +(new Date) + '-' + Math.random().toString(36).substr(3, 6);
+
+        main();
+
+        function main(){
+            initArticleReadDataList();
+
+            parseUrlParams();
+
+            if(target){
+                window.addEventListener("message", function(e){
+                    try{
+                        if(e.source !== window.parent || window === window.top) return;
+
+                        var data = JSON.parse(e.data);
+
+                        switch(data.action){
+                            case 'updateArticleRead': 
+                                updateArticleReadData(data.payload);
+                                break;
+                            case 'updateArticleCategoryRead':
+                                updateArticleCategoryReadData(data.payload);
+                        }
+                    }catch(e){}
+                }, false);
+            }
+        }
+
+        function postData(data){
+            try{
+                target.postMessage(JSON.stringify(data), '*');
+            }catch(e){}
+        }
+
+        function parseUrlParams(){
+            location.search.substr(1).split('&').forEach(function(value){
+                var param = value.split('=')
+                urlParams[param[0]] = param[1];
+            })
+        }
+
+        function initArticleReadDataList(){
+            var articleReadRecordsInCookie = Cookies.get(READ_KEY_OF_COOKIE);
+
+            if(!articleReadRecordsInCookie){
+                return;
+            }
+
+            articleReadRecordsInCookie.split('|').forEach(function(readRecord){
+                var list = readRecord.split('.');
+                articleReadDataList.push({
+                    articleId: list[0],
+                    readPercent: list[1]
+                });
+            });
+        }
+        var _curCategoryReadInforList = null;
+        function getCategoryReadListFromCookie(categoryList){
+            if(_curCategoryReadInforList){
+                return _curCategoryReadInforList;
+            }
+
+            _curCategoryReadInforList = [];
+
+            var index;
+            var data;
+            for(var i = 0, category; category = categoryList[i++];){
+                index = commonCategoryList.indexOf(category);
+
+                if(index === -1){
+                    continue;
+                }
+
+                data = (categoryReadInforList[index] || '0-0-0').split('-');
+
+                _curCategoryReadInforList.push({
+                    index: index,
+                    readPercentTotal: +data[0] * data[2],
+                    readTimeSecond: +data[1] * 60,
+                    readTotal: +data[2],
+                    isFirstUpdate: true
+                })
+            }
+
+            return _curCategoryReadInforList;
+        }
+        function setCategoryReadListToCookie(categoryDataList){
+            for(var i = 0, item; item = categoryDataList[i++];){
+                categoryReadInforList[item.index] = [
+                    Math.round(item.readPercentTotal / item.readTotal),
+                    (item.readTimeSecond / 60).toFixed(1),
+                    item.readTotal
+                ].join('-');
+            }
+
+            Cookies.set(CATEGORY_READ_KEY_OF_COOKIE, categoryReadInforList.join('|'), {
+                expires: 3650,
+                domain: 'popin.cc'
+            }) 
+        }
+        function updateArticleCategoryReadData(data){
+            if(typeof data.commonCategory === 'string'){
+                data.commonCategory = [data.commonCategory];
+            }
+
+            var list = getCategoryReadListFromCookie(data.commonCategory);
+
+            if(!data.readPercent){
+                return;
+            }
+
+            for(var i = 0, item; item = list[i++];){
+                item.readPercentTotal += data.readPercent;
+                item.readTimeSecond += data.readTimeSecond;
+
+                if(item.isFirstUpdate){
+                    item.isFirstUpdate = false;
+                    item.readTotal++;
+                }
+            }
+
+            setCategoryReadListToCookie(list);
+
+            addTdLog('common_category_read_log', {
+                common_category: data.commonCategory.join('|'),
+                percent: data.readPercent,
+                readTimeSecond: data.readTimeSecond,
+                feLogId: feLogId,
+                url: document.referrer
+            });
+        }
+
+        function updateArticleReadData(data){
+            var articleId = data.articleId || '';
+            var readPercent = +data.readPercent || 0;
+
+            if(!data 
+                // || !/^[a-f0-9]{24}$/.test(articleId)
+                || readPercent <= 0 || readPercent > 100
+            ){
+                return;
+            }
+
+            var record;
+
+            for(var i = 0; record = articleReadDataList[i]; i++){
+                if(record.articleId !== articleId){
+                    continue;
+                }
+
+                // 只记录最大阅读进�&#65533;
+                if(readPercent > +record.readPercent){
+                    record.readPercent = readPercent;
+                }
+
+                if(i === 0){
+                    setReadDataToCookie();
+                    return;
+                }
+
+                // 将此阅读记录调到队列头部
+                articleReadDataList.splice(i, 1);
+                break;
+            }
+
+            // 将此阅读记录插入到队列头�&#65533;
+            articleReadDataList.unshift(record || {
+                articleId: articleId,
+                readPercent: readPercent
+            });
+
+            setReadDataToCookie();
+
+            addTdLog('article_read_log_for_rt', {
+                articleId: articleId,
+                type: 'updateRead',
+                percent: readPercent,
+                tId: feLogId,
+                url: document.referrer
+            });
+        }
+
+        function deleteCvAdRecord(payload){
+            if(payload.nid){
+                deleteRecord(payload.nid);
+            }
+        }
+
+        function deleteRecord(articleId){
+            var record;
+            for(var i = 0; record = articleReadDataList[i]; i++){
+                if(record.articleId === articleId){
+                    record = articleReadDataList.splice(i, 1);
+                    
+                    setReadDataToCookie();
+
+                    break;
+                }
+            }
+
+        }
+
+        function setReadDataToCookie(){
+            // 只保留最近阅读的 maxOfAdReadRecord 条记�&#65533;
+            articleReadDataList.splice(maxOfAdReadRecord);
+
+            var readRecordList = [];
+            articleReadDataList.forEach(function(record){
+                readRecordList.push(record.articleId + '.' + record.readPercent);
+            })
+
+
+            Cookies.set(READ_KEY_OF_COOKIE, readRecordList.join('|'), {
+                expires: 365,
+                domain: 'popin.cc'
+            });
+        }
+
+        function addTdLog(table, data){
+            if(window.Treasure2){
+                (new window.Treasure2({
+                    writeKey: "8378/25839e06ce4cc1cab55c1c1f1e49d336d6d1d48f",
+                    database: 'fe_monitor'
+                })).addRecord(table, data);
+            }else{
+                setTimeout(function(){
+                    addTdLog(table, data);
+                }, 1000);
+            }
+        }
+    }catch(e){}
+</script>
+</body></html>

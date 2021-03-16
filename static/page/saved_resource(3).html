@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)https://blog.xuite.net/mahabodhicitta/manjuvimalakirti/110852185 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+<style>
+html, body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow:hidden;
+}
+</style>
+</head>
+<body marginwidth="0" marginheight="0">
+
+<script src="./tag.js"></script>
+<script src="./jquery-1.9.1.min.js" integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+(function(){
+    function hideAd() {
+    }
+    window.hideAd = hideAd;
+    function noAd() {
+        console.info('SSP AD noAd k9GSw');
+        clearTimeout(thirdTime);
+        clearInterval(monitor);
+        hideAd();
+        window.location.replace('https://ssp.hinet.net/api/web/request/?c=2017005&s=201702000053&t=1614606097343&u=c75de6b8-d2ce-fb1e-e432-6ac32422e53a&o=k9GSw&show=static&ca=&k=&cab=&kb=&mode=roll');
+    }
+    window.noAd = noAd;
+    function showAd() {
+        clearTimeout(thirdTime);
+        $.get("https://ssp.hinet.net/api/web/third?c=2017005&s=201702000053&th=77&wc=1048");
+        console.info('SSP AD show k9GSw');
+    }
+    window.showAd = showAd;
+    var thirdTime = setTimeout(function() {
+        var yahoo_ad = $('#thirdparty').find('img').attr('src');
+        var head_javascript = $('head').find('script');
+        var iframe_content = $('body').find('iframe');
+        if(yahoo_ad !=  undefined || iframe_content.length > 0|| head_javascript.length > 0){
+            showAd();
+        }else{
+            noAd();
+        }
+    },3000);
+
+    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent",
+    eventer = window[eventMethod],
+    messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+    eventer(messageEvent,function(e) {
+        //console.log(e)
+        var key = e.message ? "message" : "data",
+            data = e[key];
+        if(data === "noAd"){ console.info(data); noAd();e.stopPropagation();}
+        if(data === "showAd"){console.info(data); showAd();e.stopPropagation();}
+    },false);
+    
+    var monitor = setInterval(function(){
+        var elem = document.activeElement;
+        if(elem && (elem.tagName == 'IFRAME' || elem.tagName == 'iframe')){
+            clearInterval(monitor);
+            console.info('clicked!')
+            hideAd();
+        }
+    },1000)
+})();
+</script>
+<div id="thirdparty">
+<div id="apxzone_HUAi9M-f"> <iframe width="300" height="250" marginwidth="0" marginheight="0" frameborder="0" scrolling="no" style="border: none; overflow: hidden; display: block; margin: 0px auto;" src="./saved_resource(4).html"></iframe></div>
+<script src="./zone.js" async=""></script></div>
+
+
+</body></html>
